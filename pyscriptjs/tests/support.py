@@ -237,8 +237,7 @@ class JsMultipleErrors(Exception):
 
     def __init__(self, errors):
         lines = ["Multiple JS errors found:"]
-        for err in errors:
-            lines.append(JsError.format_playwright_error(err))
+        lines.extend(JsError.format_playwright_error(err) for err in errors)
         msg = "\n".join(lines)
         super().__init__(msg)
         self.errors = errors

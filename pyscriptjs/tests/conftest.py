@@ -31,21 +31,19 @@ class HTTPServer(SuperHTTPServer):
 
 @pytest.fixture(scope="session")
 def http_server(logger):
+
     class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
         def log_message(self, fmt, *args):
             logger.log("http_server", fmt % args, color="blue")
 
     host, port = "127.0.0.1", 8080
-    base_url = f"http://{host}:{port}"
-
     # serve_Run forever under thread
     server = HTTPServer((host, port), MyHTTPRequestHandler)
 
     thread = threading.Thread(None, server.run)
     thread.start()
 
-    yield base_url  # Transition to test here
-
+    yield f"http://{host}:{port}"
     # End thread
     server.shutdown()
     thread.join()

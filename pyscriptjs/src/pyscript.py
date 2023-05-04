@@ -182,8 +182,7 @@ class Element:
         if from_content:
             el = el.content
 
-        _el = el.querySelector(query)
-        if _el:
+        if _el := el.querySelector(query):
             return Element(_el.id, _el)
         else:
             console.log(f"WARNING: can't find element matching query {query}")
@@ -342,7 +341,7 @@ class PyListTemplate:
 
     def connect(self):
         self.md = main_div = document.createElement("div")
-        main_div.id = self._id + "-list-tasks-container"
+        main_div.id = f"{self._id}-list-tasks-container"
 
         if self.theme:
             self.theme.theme_it(main_div)
@@ -350,10 +349,11 @@ class PyListTemplate:
         self.parent.appendChild(main_div)
 
     def add(self, *args, **kws):
-        if not isinstance(args[0], self.item_class):
-            child = self.item_class(*args, **kws)
-        else:
-            child = args[0]
+        child = (
+            args[0]
+            if isinstance(args[0], self.item_class)
+            else self.item_class(*args, **kws)
+        )
         child.register_parent(self)
         return self._add(child)
 

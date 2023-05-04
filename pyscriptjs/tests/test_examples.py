@@ -226,7 +226,7 @@ def test_simple_clock(http_server, page):
     pattern = r"\d{2}/\d{2}/\d{4}, \d{2}:\d{2}:\d{2}"
     for _ in range(TEST_ITERATIONS):
         content = page.inner_html("#outputDiv2")
-        if re.match(pattern, content) and int(content[-1]) in (0, 4, 8):
+        if re.match(pattern, content) and int(content[-1]) in {0, 4, 8}:
             assert page.inner_html("#outputDiv3") == "It's espresso time!"
             break
         else:
